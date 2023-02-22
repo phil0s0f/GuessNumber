@@ -31,34 +31,82 @@ public class MainActivity extends AppCompatActivity {
         rnd = generateRandomInt(100);
         refreshAttempts();
     }
-    public void showRnd(){
+
+    public void showRnd() {
         EditText editText = (EditText) findViewById(R.id.editText);
         editText.setText("" + rnd);
     }
+
     public static int generateRandomInt(int upperRange) {
         Random random = new Random();
         return random.nextInt(upperRange);
     }
+
     public void refreshAttempts() {
         TextView textView = (TextView) findViewById(R.id.textView);
         textView.setText("Количество попыток: " + attempts);
     }
+
     public void onButtonClickGuess(View view) {
         EditText editText = (EditText) findViewById(R.id.editText);
         //TODO сделать отгадывание
     }
 
     public void onButtonClickHint(View view) {
-        Toast toast;
-        if (attempts - 2 >= 0) {
+        Toast toast = null;
+        Button btn = (Button) view;
+        String switcher = btn.getText() + "";
+        if (attempts - 2 < 0) {
+            toast = Toast.makeText(this, "Невозможно получить подсказку! У вас меньше 2-х попыток", Toast.LENGTH_SHORT);
+            //toast.show();
+        } else {
             attempts -= 2;
             refreshAttempts();
-        } else {
-            toast = Toast.makeText(this, "Невозможно получить подсказку! У вас меньше 2-х попыток", Toast.LENGTH_LONG);
-            toast.show();
+            switch (switcher) {
+                case "Чет/нечет":
+                    toast = Toast.makeText(this, dividesByTwo(rnd), Toast.LENGTH_LONG);
+                    //toast.show();
+                    break;
+                case "0-49/50-99":
+                    toast = Toast.makeText(this, whatRange(rnd), Toast.LENGTH_LONG);
+                    break;
+                case "меньше 10":
+                    toast = Toast.makeText(this, sumLessTen(rnd), Toast.LENGTH_LONG);
+                    break;
+            }
+            //toast.show();
         }
+        toast.show();
+    }
 
-        //TODO сделать действия для трех попыток
+    static String dividesByTwo(int num) {
+        if (num % 2 == 0) {
+            return ("Четное");
+        } else {
+            return ("Нечетное");
+        }
+    }
+
+    static String whatRange(int num) {
+        if (num < 50) {
+            return ("0-49");
+        } else {
+            return ("50-99");
+        }
+    }
+
+    static String sumLessTen(int num) {
+        num = Math.abs(num);
+        int sum = 0;
+        while (num > 0) {
+            sum += num % 10;
+            num /= 10;
+        }
+        if (sum < 10) {
+            return ("Меньше 10");
+        } else {
+            return ("Больше или равно 10");
+        }
     }
 
     public void onButtonClickNewGame(View view) {
