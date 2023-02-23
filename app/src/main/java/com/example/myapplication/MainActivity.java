@@ -49,7 +49,34 @@ public class MainActivity extends AppCompatActivity {
 
     public void onButtonClickGuess(View view) {
         EditText editText = (EditText) findViewById(R.id.editText);
-        //TODO сделать отгадывание
+        Toast toast = null;
+        Button btn = (Button) view;
+        int numb = Integer.parseInt(editText.getText().toString());
+        if (editText.getText().toString().equals("")) {
+            toast = Toast.makeText(this, "Введите число!", Toast.LENGTH_SHORT);
+        } else {
+            if (attempts > 0) {
+                if (numb == rnd) {
+                    btn.setEnabled(false);
+                    toast = Toast.makeText(this, "Победа! Вы угадали!", Toast.LENGTH_SHORT);
+                } else {
+                    if (numb > rnd - 20 && numb < rnd + 20) {
+                        toast = Toast.makeText(this, "Очень тепло!", Toast.LENGTH_SHORT);
+                    } else if (numb > rnd - 40 && numb < rnd + 40) {
+                        toast = Toast.makeText(this, "Тепло!", Toast.LENGTH_SHORT);
+                    } else if (numb > rnd - 60 && numb < rnd + 60) {
+                        toast = Toast.makeText(this, "Холодно!", Toast.LENGTH_SHORT);
+                    } else if (numb > rnd - 80 && numb < rnd + 80) {
+                        toast = Toast.makeText(this, "Очень холодно!", Toast.LENGTH_SHORT);
+                    }
+                    attempts--;
+                    refreshAttempts();
+                }
+            } else {
+                toast = Toast.makeText(this, "У вас не осталось попыток, начните новую игру! Число которое было загадано: " + rnd, Toast.LENGTH_SHORT);
+            }
+        }
+        toast.show();
     }
 
     public void onButtonClickHint(View view) {
@@ -58,25 +85,30 @@ public class MainActivity extends AppCompatActivity {
         String switcher = btn.getText() + "";
         if (attempts - 2 < 0) {
             toast = Toast.makeText(this, "Невозможно получить подсказку! У вас меньше 2-х попыток", Toast.LENGTH_SHORT);
-            //toast.show();
         } else {
             attempts -= 2;
             refreshAttempts();
             switch (switcher) {
                 case "Чет/нечет":
-                    toast = Toast.makeText(this, dividesByTwo(rnd), Toast.LENGTH_LONG);
-                    //toast.show();
+                    toast = Toast.makeText(this, dividesByTwo(rnd), Toast.LENGTH_SHORT);
                     break;
                 case "0-49/50-99":
-                    toast = Toast.makeText(this, whatRange(rnd), Toast.LENGTH_LONG);
+                    toast = Toast.makeText(this, whatRange(rnd), Toast.LENGTH_SHORT);
                     break;
                 case "меньше 10":
-                    toast = Toast.makeText(this, sumLessTen(rnd), Toast.LENGTH_LONG);
+                    toast = Toast.makeText(this, sumLessTen(rnd), Toast.LENGTH_SHORT);
                     break;
             }
-            //toast.show();
         }
         toast.show();
+    }
+
+    public void onButtonClickNewGame(View view) {
+        attempts = 10;
+        rnd = generateRandomInt(100);
+        refreshAttempts();
+        Button btn = (Button) findViewById(R.id.buttonGuess);
+        btn.setEnabled(true);
     }
 
     static String dividesByTwo(int num) {
@@ -107,12 +139,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             return ("Больше или равно 10");
         }
-    }
-
-    public void onButtonClickNewGame(View view) {
-        attempts = 10;
-        rnd = generateRandomInt(100);
-        refreshAttempts();
     }
 }
 
