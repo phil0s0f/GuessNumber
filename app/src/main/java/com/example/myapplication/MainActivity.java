@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         toast.show();
+        //TODO вылет видимо выходим за диапозон надо еще один else
     }
 
     public void onButtonClickHint(View view) {
