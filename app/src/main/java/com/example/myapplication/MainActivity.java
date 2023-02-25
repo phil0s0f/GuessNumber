@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                         toast = Toast.makeText(this, "Тепло!", Toast.LENGTH_SHORT);
                     } else if (numb > rnd - 60 && numb < rnd + 60) {
                         toast = Toast.makeText(this, "Холодно!", Toast.LENGTH_SHORT);
-                    } else if (numb > rnd - 80 && numb < rnd + 80) {
+                    } else {
                         toast = Toast.makeText(this, "Очень холодно!", Toast.LENGTH_SHORT);
                     }
                     attempts--;
